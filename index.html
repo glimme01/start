@@ -1,241 +1,667 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- CSS -->
-    <link href="styles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>GCE-Lernportal</title>
     <style>
-		  body {
-        background-image: linear-gradient(#004b87, #002f54);
+      :root {
+        --primary: #004b87;
+        --primary-dark: #002f54;
+        --accent: #0077ff;
+        --light: #f8f9fa;
+        --dark: #1a1a1a;
+        --card-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      }
+      
+      body {
+        background-image: linear-gradient(var(--primary), var(--primary-dark));
         background-attachment: fixed;
-        }
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        transition: background-color 0.3s, color 0.3s;
+      }
+      
+      body.dark-mode {
+        background-image: none;
+        background-color: var(--dark);
+        color: var(--light);
+      }
+      
+      .header {
+        text-align: center;
+        padding: 2rem 0;
+      }
+      
+      .logo {
+        max-width: 400px;
+        height: auto;
+        margin-bottom: 1rem;
+      }
+      
+      .search-container {
+        max-width: 600px;
+        margin: 0 auto 2rem;
+      }
+      
+      .card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        height: 100%;
+        background-color: var(--light);
+      }
+      
+      .dark-mode .card {
+        background-color: #2a2a2a;
+        color: var(--light);
+      }
+      
+      .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+      }
+      
+      .img-container {
+        background-color: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 1rem;
+      }
+      
+      .dark-mode .img-container {
+        background-color: #333;
+      }
+      
+      .img-fluid {
+        max-height: 100px;
+        object-fit: contain;
+      }
+      
+      .card-title {
+        font-weight: 600;
+        color: var(--primary-dark);
+        margin-bottom: 0.5rem;
+      }
+      
+      .dark-mode .card-title {
+        color: var(--accent);
+      }
+      
+      .card-text {
+        color: #555;
+        font-size: 0.9rem;
+        min-height: 2.7rem;
+      }
+      
+      .dark-mode .card-text {
+        color: #ccc;
+      }
+      
       .btn-primary {
-        background-color: #002f54;
-        border-color: #002f54; 
-        }
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        transition: all 0.2s;
+      }
+      
       .btn-primary:hover,
       .btn-primary:focus,
       .btn-primary:active {
-        background-color: #004b87;
-        border-color: #004b87; 
+        background-color: var(--primary);
+        border-color: var(--primary);
+        transform: scale(1.05);
+      }
+      
+      .btn-outline-primary {
+        color: var(--primary-dark);
+        border-color: var(--primary-dark);
+        background-color: transparent;
+        margin-left: 0.5rem;
+      }
+      
+      .btn-outline-primary:hover {
+        background-color: var(--primary-dark);
+        color: white;
+      }
+      
+      .category-tabs {
+        margin-bottom: 2rem;
+      }
+      
+      .nav-link {
+        color: var(--light);
+        font-weight: 500;
+        padding: 0.7rem 1.5rem;
+        border-radius: 30px;
+        margin: 0 0.3rem;
+        transition: all 0.2s;
+      }
+      
+      .nav-link:hover {
+        background-color: rgba(255,255,255,0.1);
+        color: white;
+      }
+      
+      .nav-link.active {
+        background-color: white !important;
+        color: var(--primary-dark) !important;
+        font-weight: 600;
+      }
+      
+      .dark-mode .nav-link.active {
+        background-color: var(--accent) !important;
+        color: var(--dark) !important;
+      }
+      
+      .tool-icon {
+        margin-right: 0.5rem;
+      }
+      
+      footer {
+        color: white;
+        padding: 2rem 0;
+        margin-top: 2rem;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+      
+      .dark-mode footer {
+        color: var(--light);
+      }
+      
+      @media (max-width: 767.98px) {
+        .card-text {
+          min-height: auto;
         }
-	  </style>
-    <title>GCE-Startseite</title>
+        
+        .nav-link {
+          padding: 0.5rem 0.8rem;
+          margin: 0 0.2rem;
+          font-size: 0.9rem;
+        }
+      }
+      
+      /* Dark mode toggle */
+      .dark-mode-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+      
+      .dark-mode-toggle .btn {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+      
+      /* Animations */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+    </style>
   </head>
   <body>
-    <div id="mainarea" class="col-12 p-5">
-      <div class="row justify-content-center">
-        <img class="mb-3" src="assets/gce.png" style="width: 50rem;">
+    <div class="container">
+      <div class="header">
+        <img src="assets/gce.png" alt="GCE Logo" class="logo">
+        <h2 class="text-white mb-4">Digitale Lernwerkzeuge</h2>
       </div>
-      <div class="row justify-content-center">
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/wikipedia.svg" class="img-fluid rounded-start">
+      
+      <div class="search-container">
+        <div class="input-group">
+          <input type="text" class="form-control" id="searchTools" placeholder="Werkzeuge durchsuchen...">
+          <button class="btn btn-light" type="button">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="category-tabs">
+        <ul class="nav nav-pills justify-content-center" id="toolsTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab">
+              <i class="fas fa-th tool-icon"></i>Alle
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="math-tab" data-bs-toggle="tab" data-bs-target="#math" type="button" role="tab">
+              <i class="fas fa-calculator tool-icon"></i>Mathematik
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="science-tab" data-bs-toggle="tab" data-bs-target="#science" type="button" role="tab">
+              <i class="fas fa-flask tool-icon"></i>Naturwissenschaften
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="coding-tab" data-bs-toggle="tab" data-bs-target="#coding" type="button" role="tab">
+              <i class="fas fa-code tool-icon"></i>Programmieren
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="collaboration-tab" data-bs-toggle="tab" data-bs-target="#collaboration" type="button" role="tab">
+              <i class="fas fa-users tool-icon"></i>Zusammenarbeit
+            </button>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="tab-content" id="toolsTabContent">
+        <div class="tab-pane fade show active" id="all" role="tabpanel">
+          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <!-- Wikipedia Card -->
+            <div class="col">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/wikipedia.svg" class="img-fluid" alt="Wikipedia Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">Wikipedia</h5>
+                      <p class="card-text">Die freie Enzyklopädie mit Wissen zu allen Themen</p>
+                      <div class="mt-auto">
+                        <a href="https://de.wikipedia.org" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Wikipedia</h5>
-                  <p class="card-text">Die freie Enzyklopädie<br><br></p>
-                  <a href="https://de.wikipedia.org" class="btn btn-primary">Öffnen ➤</a>
+            </div>
+            
+            <!-- GeoGebra Card -->
+            <div class="col" data-category="math">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/geogebra.svg" class="img-fluid" alt="GeoGebra Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">GeoGebra</h5>
+                      <p class="card-text">Werkzeuge für Funktionen, Geometrie und mathematische Berechnungen</p>
+                      <div class="mt-auto">
+                        <a href="https://www.geogebra.org/calculator" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Sketchometry Card -->
+            <div class="col" data-category="math">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/sketchometry.png" class="img-fluid" alt="Sketchometry Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">sketchometry</h5>
+                      <p class="card-text">Wandelt deine Skizzen und Zeichnungen in geometrische Konstruktionen um</p>
+                      <div class="mt-auto">
+                        <a href="https://start.sketchometry.org" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- LEIFIphysik Card -->
+            <div class="col" data-category="science">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/leifi-physik.png" class="img-fluid" alt="LEIFIphysik Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">LEIFIphysik</h5>
+                      <p class="card-text">Materialien, Versuche, Aufgaben und Tests für das Physiklernen</p>
+                      <div class="mt-auto">
+                        <a href="https://www.leifiphysik.de" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Scratch Card -->
+            <div class="col" data-category="coding">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/scratch.svg" class="img-fluid" alt="Scratch Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">Scratch</h5>
+                      <p class="card-text">Programmiere spielerisch eigene Geschichten, Spiele und Animationen</p>
+                      <div class="mt-auto">
+                        <a href="https://scratch.mit.edu/projects/editor" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Python Card -->
+            <div class="col" data-category="coding">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/python.svg" class="img-fluid" alt="Python Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">Python & TigerJython</h5>
+                      <p class="card-text">Programmieren, Turtle- & Koordinatengrafiken mit Python</p>
+                      <div class="mt-auto">
+                        <a href="https://webtigerjython.ethz.ch" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Editor
+                        </a>
+                        <a href="http://www.python-online.ch" class="btn-guide btn-outline-primary" target="_blank">
+                          <i class="fas fa-book me-1"></i>Guide
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Diagrams.net Card -->
+            <div class="col" data-category="collaboration">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/diagrams-net.svg" class="img-fluid" alt="Diagrams.net Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">diagrams.net</h5>
+                      <p class="card-text">Leistungsstarkes Werkzeug zur Erstellung von Diagrammen und Grafiken</p>
+                      <div class="mt-auto">
+                        <a href="https://app.diagrams.net" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Cryptpad Card -->
+            <div class="col" data-category="collaboration">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/cryptpad.svg" class="img-fluid" alt="Cryptpad Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">Cryptpad</h5>
+                      <p class="card-text">Umfangreiche Suite zur sicheren kollaborativen Zusammenarbeit</p>
+                      <div class="mt-auto">
+                        <a href="https://cryptpad.fr" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Etherpad Card -->
+            <div class="col" data-category="collaboration">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/etherpad.png" class="img-fluid" alt="Etherpad Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">Etherpad</h5>
+                      <p class="card-text">Einfacher Texteditor zur kollaborativen Bearbeitung von Texten in Echtzeit</p>
+                      <div class="mt-auto">
+                        <a href="https://pad.disroot.org/" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Kahoot Card -->
+            <div class="col" data-category="collaboration">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/kahoot.png" class="img-fluid" alt="Kahoot Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">Kahoot</h5>
+                      <p class="card-text">Interaktives Lernspiel für spielerische Quiz- und Fragerunden</p>
+                      <div class="mt-auto">
+                        <a href="https://kahoot.it" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Klicksafe Card -->
+            <div class="col">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/klicksafe.svg" class="img-fluid" alt="Klicksafe Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">Klicksafe</h5>
+                      <p class="card-text">EU-Initiative für mehr Medienkompetenz und Sicherheit im Internet</p>
+                      <div class="mt-auto">
+                        <a href="https://www.klicksafe.de" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Filestation Card -->
+            <div class="col">
+              <div class="card h-100">
+                <div class="row g-0 h-100">
+                  <div class="col-4">
+                    <div class="img-container">
+                      <img src="assets/filestation.svg" class="img-fluid" alt="Filestation Logo">
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">Filestation</h5>
+                      <p class="card-text">Die Homeverzeichnisse im Webbrowser bequem verwalten</p>
+                      <div class="mt-auto">
+                        <a href="https://qnap2015ns01.schule.gce/filestation" class="btn btn-primary" target="_blank">
+                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/geogebra.svg" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">GeoGebra Rechner Suite</h5>
-                  <p class="card-text">Werkzeuge für Funktionen, Geometrie und mehr<br></p>
-                  <a href="https://www.geogebra.org/calculator" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
+        
+        <div class="tab-pane fade" id="math" role="tabpanel">
+          <!-- Math category content will be populated by JavaScript -->
         </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/sketchometry.png" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">sketchometry</h5>
-                  <p class="card-text">sketchometry wandelt deine Skizzen in Konstruktionen um<br></p>
-                  <a href="https://start.sketchometry.org" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
+        
+        <div class="tab-pane fade" id="science" role="tabpanel">
+          <!-- Science category content will be populated by JavaScript -->
         </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/leifi-physik.png" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Leifi Physik</h5>
-                  <p class="card-text">Materialien, Versuche, Aufgaben, Tests und Lesestoff<br></p>
-                  <a href="https://www.leifiphysik.de" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
+        
+        <div class="tab-pane fade" id="coding" role="tabpanel">
+          <!-- Coding category content will be populated by JavaScript -->
         </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/scratch.svg" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Scratch</h5>
-                  <p class="card-text">Programmiere eigene Geschichten, Spiele und Animationen<br></p>
-                  <a href="https://scratch.mit.edu/projects/editor" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/python.svg" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Python</h5>
-                  <p class="card-text">Turtle- & Koordinatengrafiken mit Python und TigerJython<br></p>
-                  <a href="https://webtigerjython.ethz.ch" class="btn btn-primary">WebTigerJython ➤</a>
-                  <a href="http://www.python-online.ch" class="btn btn-primary">Guide ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/diagrams-net.svg" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">diagrams.net</h5>
-                  <p class="card-text">Ein leistungsstarkes Werkzeug zur Erstellung von Grafiken</p>
-                  <a href="https://app.diagrams.net" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/cryptpad.svg" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Cryptpad</h5>
-                  <p class="card-text">Umfangreiche Suite zur Zusammenarbeit<br></p>
-                  <a href="https://cryptpad.fr" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/etherpad.png" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Etherpad</h5>
-                  <p class="card-text">Texteditor zur kollaborativen Bearbeitung von Texten in Echtzeit<br></p>
-                  <a href="https://pad.disroot.org/" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/kahoot.png" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Kahoot</h5>
-                  <p class="card-text">Spaß mit Quizspielen<br><br></p>
-                  <a href="https://kahoot.it" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/klicksafe.svg" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Klicksafe</h5>
-                  <p class="card-text">Die EU-Initiative für mehr Sicherheit im Netz</p>
-                  <a href="https://www.klicksafe.de" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Card -->
-        <div class="col-md-auto pb-4">
-          <div class="card mb-3" style="max-width: 31.3rem;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="assets/filestation.svg" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Filestation</h5>
-                  <p class="card-text">Die Homeverzeichnisse im Webbrowser<br></p>
-                  <a href="https://qnap2015ns01.schule.gce/filestation" class="btn btn-primary">Öffnen ➤</a>
-                </div>
-              </div>
-            </div>
-          </div>
+        
+        <div class="tab-pane fade" id="collaboration" role="tabpanel">
+          <!-- Collaboration category content will be populated by JavaScript -->
         </div>
       </div>
     </div>
+    
+    <footer class="container">
+      <p>© 2025 GCE - Gymnasium Christian Ernestinum - Alle Rechte vorbehalten</p>
+    </footer>
+    
+    <!-- Dark mode toggle button -->
+    <div class="dark-mode-toggle">
+      <button class="btn btn-primary" id="darkModeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        
+        darkModeToggle.addEventListener('click', function() {
+          body.classList.toggle('dark-mode');
+          if (body.classList.contains('dark-mode')) {
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+          } else {
+            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+          }
+        });
+        
+        // Filter functionality for search
+        const searchInput = document.getElementById('searchTools');
+        const allCards = document.querySelectorAll('.col');
+        
+        searchInput.addEventListener('input', function() {
+          const searchTerm = this.value.toLowerCase();
+          
+          allCards.forEach(card => {
+            const cardTitle = card.querySelector('.card-title').textContent.toLowerCase();
+            const cardText = card.querySelector('.card-text').textContent.toLowerCase();
+            
+            if (cardTitle.includes(searchTerm) || cardText.includes(searchTerm)) {
+              card.style.display = '';
+              card.classList.add('fade-in');
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+        
+        // Category filtering
+        const categoryTabs = document.querySelectorAll('#toolsTabs .nav-link');
+        
+        // Clone cards to respective category tabs
+        categoryTabs.forEach(tab => {
+          tab.addEventListener('click', function() {
+            const targetTabId = this.getAttribute('data-bs-target').substring(1);
+            
+            if (targetTabId !== 'all') {
+              const categoryPane = document.getElementById(targetTabId);
+              categoryPane.innerHTML = '';
+              
+              const rowDiv = document.createElement('div');
+              rowDiv.className = 'row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4';
+              categoryPane.appendChild(rowDiv);
+              
+              allCards.forEach(card => {
+                if (card.getAttribute('data-category') === targetTabId) {
+                  rowDiv.appendChild(card.cloneNode(true));
+                }
+              });
+            }
+          });
+        });
+        
+        // Add hover effect
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px)';
+          });
+          
+          card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+          });
+        });
+      });
+    </script>
   </body>
 </html>
