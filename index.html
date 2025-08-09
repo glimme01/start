@@ -1,667 +1,645 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>GCE-Lernportal</title>
-    <style>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>GCE-Startseite</title>
+  <style>
+    :root {
+      --primary: #005da8;
+      --primary-dark: #002f54;
+      --accent: #0077ff;
+      --light: #f8f9fa;
+      --dark: #1a1a1a;
+      --card: #ffffff;
+      --muted: #555;
+      --card-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      --admin: #8b0000;
+      --admin-bg: radial-gradient(1200px 1200px at 50% 50%, #b30000 0%, #680000 40%, #2b0000 100%);
+    }
+
+    @media (prefers-color-scheme: dark) {
       :root {
-        --primary: #004b87;
-        --primary-dark: #002f54;
-        --accent: #0077ff;
-        --light: #f8f9fa;
-        --dark: #1a1a1a;
-        --card-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        --light: #e9eef4;
+        --dark: #0f1115;
+        --card: #1b1e24;
+        --muted: #c9d1d9;
       }
-      
-      body {
-        background-image: linear-gradient(var(--primary), var(--primary-dark));
-        background-attachment: fixed;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        transition: background-color 0.3s, color 0.3s;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      background-image: linear-gradient(var(--primary), var(--primary-dark));
+      background-attachment: fixed;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.3s, color 0.3s, background-image 0.6s ease;
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    body.dark-mode {
+      background-image: none;
+      background-color: var(--dark);
+      color: var(--light)
+    }
+
+    body.admin-mode {
+      background-image: var(--admin-bg)
+    }
+
+    .header {
+      text-align: center;
+      padding: 2rem 0
+    }
+
+    .logo {
+      max-width: 380px;
+      height: auto;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 10px 25px rgba(0, 0, 0, .25))
+    }
+
+    .card {
+      border: none;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease;
+      height: 100%;
+      background-color: var(--card)
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, .25)
+    }
+
+    .img-container {
+      background-color: rgba(0, 0, 0, .03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 1rem
+    }
+
+    .img-fluid {
+      max-height: 100px;
+      object-fit: contain
+    }
+
+    .card-title {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: .35rem
+    }
+
+    .dark-mode .card-title {
+      color: var(--accent)
+    }
+
+    .card-text {
+      color: var(--muted);
+      font-size: .95rem;
+      min-height: 2.7rem
+    }
+
+    .btn-primary {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      border-radius: 10px;
+      padding: .55rem 1rem;
+      transition: transform .18s ease
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-1px) scale(1.02)
+    }
+
+    .btn-outline-primary {
+      color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      background-color: transparent;
+      margin-left: .5rem;
+      border-radius: 10px
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--primary-dark);
+      color: white
+    }
+
+    .btn-guide {
+      position: relative;
+      overflow: hidden
+    }
+
+    .btn-guide:after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .35) 50%, transparent 100%);
+      transition: transform .6s ease
+    }
+
+    .btn-guide:hover:after {
+      transform: translateX(100%)
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1.25rem
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr)
       }
-      
-      body.dark-mode {
-        background-image: none;
-        background-color: var(--dark);
-        color: var(--light);
+    }
+
+    @media (min-width: 992px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr)
       }
-      
-      .header {
-        text-align: center;
-        padding: 2rem 0;
+    }
+
+    footer {
+      color: white;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      text-align: center;
+      font-size: .9rem
+    }
+
+    .dark-mode footer {
+      color: var(--light)
+    }
+
+    .dark-mode-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000
+    }
+
+    .dark-mode-toggle .btn {
+      border-radius: 50%;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+    }
+
+    .fade-out {
+      animation: fadeOut .45s ease forwards
+    }
+
+    .fade-in {
+      animation: fadeIn .6s ease forwards
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: scale(.98)
       }
-      
-      .logo {
-        max-width: 400px;
-        height: auto;
-        margin-bottom: 1rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
       }
-      
-      .search-container {
-        max-width: 600px;
-        margin: 0 auto 2rem;
+
+      to {
+        opacity: 1;
+        transform: none
       }
-      
-      .card {
-        border: none;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: var(--card-shadow);
-        transition: all 0.3s ease;
-        height: 100%;
-        background-color: var(--light);
+    }
+
+    .glitch-enter {
+      animation: glitchIn .6s cubic-bezier(.2, .8, .2, 1) forwards
+    }
+
+    @keyframes glitchIn {
+      0% {
+        transform: scale(1.05) skewX(3deg);
+        filter: hue-rotate(0deg)
       }
-      
-      .dark-mode .card {
-        background-color: #2a2a2a;
-        color: var(--light);
+
+      40% {
+        transform: scale(1.02) skewX(-2deg);
+        filter: hue-rotate(30deg)
       }
-      
-      .card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+
+      70% {
+        transform: scale(1.01) skewX(1deg);
+        filter: hue-rotate(-15deg)
       }
-      
-      .img-container {
-        background-color: #f5f5f5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        padding: 1rem;
+
+      100% {
+        transform: none;
+        filter: none
       }
-      
-      .dark-mode .img-container {
-        background-color: #333;
+    }
+
+    .tile-pop {
+      animation: pop .35s ease forwards;
+      opacity: 0;
+      transform: translateY(8px) scale(.98)
+    }
+
+    @keyframes pop {
+      to {
+        opacity: 1;
+        transform: none
       }
-      
-      .img-fluid {
-        max-height: 100px;
-        object-fit: contain;
+    }
+
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .5rem .75rem;
+      background: rgba(255, 255, 255, .12);
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: .3px;
+      text-transform: uppercase
+    }
+
+    .admin-card .card-title {
+      color: #ffdede
+    }
+
+    .admin-card .card-text {
+      color: #ffe2e2
+    }
+
+    .admin-btn {
+      background: #ff4136;
+      border: none
+    }
+
+    .admin-btn:hover {
+      background: #ff6b61
+    }
+
+    .modal-backdrop.show {
+      opacity: .5
+    }
+
+    .shake {
+      animation: shake .4s ease
+    }
+
+    @keyframes shake {
+
+      10%,
+      90% {
+        transform: translateX(-1px)
       }
-      
-      .card-title {
-        font-weight: 600;
-        color: var(--primary-dark);
-        margin-bottom: 0.5rem;
+
+      20%,
+      80% {
+        transform: translateX(2px)
       }
-      
-      .dark-mode .card-title {
-        color: var(--accent);
+
+      30%,
+      50%,
+      70% {
+        transform: translateX(-4px)
       }
-      
-      .card-text {
-        color: #555;
-        font-size: 0.9rem;
-        min-height: 2.7rem;
+
+      40%,
+      60% {
+        transform: translateX(4px)
       }
-      
-      .dark-mode .card-text {
-        color: #ccc;
-      }
-      
-      .btn-primary {
-        background-color: var(--primary-dark);
-        border-color: var(--primary-dark);
-        border-radius: 6px;
-        padding: 0.5rem 1rem;
-        transition: all 0.2s;
-      }
-      
-      .btn-primary:hover,
-      .btn-primary:focus,
-      .btn-primary:active {
-        background-color: var(--primary);
-        border-color: var(--primary);
-        transform: scale(1.05);
-      }
-      
-      .btn-outline-primary {
-        color: var(--primary-dark);
-        border-color: var(--primary-dark);
-        background-color: transparent;
-        margin-left: 0.5rem;
-      }
-      
-      .btn-outline-primary:hover {
-        background-color: var(--primary-dark);
-        color: white;
-      }
-      
-      .category-tabs {
-        margin-bottom: 2rem;
-      }
-      
-      .nav-link {
-        color: var(--light);
-        font-weight: 500;
-        padding: 0.7rem 1.5rem;
-        border-radius: 30px;
-        margin: 0 0.3rem;
-        transition: all 0.2s;
-      }
-      
-      .nav-link:hover {
-        background-color: rgba(255,255,255,0.1);
-        color: white;
-      }
-      
-      .nav-link.active {
-        background-color: white !important;
-        color: var(--primary-dark) !important;
-        font-weight: 600;
-      }
-      
-      .dark-mode .nav-link.active {
-        background-color: var(--accent) !important;
-        color: var(--dark) !important;
-      }
-      
-      .tool-icon {
-        margin-right: 0.5rem;
-      }
-      
-      footer {
-        color: white;
-        padding: 2rem 0;
-        margin-top: 2rem;
-        text-align: center;
-        font-size: 0.9rem;
-      }
-      
-      .dark-mode footer {
-        color: var(--light);
-      }
-      
-      @media (max-width: 767.98px) {
-        .card-text {
-          min-height: auto;
-        }
-        
-        .nav-link {
-          padding: 0.5rem 0.8rem;
-          margin: 0 0.2rem;
-          font-size: 0.9rem;
-        }
-      }
-      
-      /* Dark mode toggle */
-      .dark-mode-toggle {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-      }
-      
-      .dark-mode-toggle .btn {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      }
-      
-      /* Animations */
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-      
-      .fade-in {
-        animation: fadeIn 0.5s ease-in;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <img src="assets/gce.png" alt="GCE Logo" class="logo">
-        <h2 class="text-white mb-4">Digitale Lernwerkzeuge</h2>
-      </div>
-      
-      <div class="search-container">
-        <div class="input-group">
-          <input type="text" class="form-control" id="searchTools" placeholder="Werkzeuge durchsuchen...">
-          <button class="btn btn-light" type="button">
-            <i class="fas fa-search"></i>
-          </button>
+    }
+
+    .hidden {
+      display: none !important
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container main-view">
+    <div class="header">
+      <img src="assets/gce.png" alt="GCE Logo" class="logo">
+    </div>
+    <div class="grid">
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/wikipedia.svg" class="img-fluid" alt="Wikipedia"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Wikipedia</h5>
+              <p class="card-text">Die freie Enzyklopädie mit Wissen zu allen Themen</p>
+              <div class="mt-auto"><a href="https://de.wikipedia.org" class="btn btn-primary" target="_blank"><i
+                    class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
+            </div>
+          </div>
         </div>
       </div>
-      
-      <div class="category-tabs">
-        <ul class="nav nav-pills justify-content-center" id="toolsTabs" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab">
-              <i class="fas fa-th tool-icon"></i>Alle
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="math-tab" data-bs-toggle="tab" data-bs-target="#math" type="button" role="tab">
-              <i class="fas fa-calculator tool-icon"></i>Mathematik
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="science-tab" data-bs-toggle="tab" data-bs-target="#science" type="button" role="tab">
-              <i class="fas fa-flask tool-icon"></i>Naturwissenschaften
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="coding-tab" data-bs-toggle="tab" data-bs-target="#coding" type="button" role="tab">
-              <i class="fas fa-code tool-icon"></i>Programmieren
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="collaboration-tab" data-bs-toggle="tab" data-bs-target="#collaboration" type="button" role="tab">
-              <i class="fas fa-users tool-icon"></i>Zusammenarbeit
-            </button>
-          </li>
-        </ul>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/geogebra.svg" class="img-fluid" alt="GeoGebra"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">GeoGebra</h5>
+              <p class="card-text">Werkzeuge für Funktionen, Geometrie und Berechnungen</p>
+              <div class="mt-auto"><a href="https://www.geogebra.org/calculator" class="btn btn-primary"
+                  target="_blank"><i class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <div class="tab-content" id="toolsTabContent">
-        <div class="tab-pane fade show active" id="all" role="tabpanel">
-          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            <!-- Wikipedia Card -->
-            <div class="col">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/wikipedia.svg" class="img-fluid" alt="Wikipedia Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Wikipedia</h5>
-                      <p class="card-text">Die freie Enzyklopädie mit Wissen zu allen Themen</p>
-                      <div class="mt-auto">
-                        <a href="https://de.wikipedia.org" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/sketchometry.png" class="img-fluid" alt="sketchometry"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">sketchometry</h5>
+              <p class="card-text">Skizzen in geometrische Konstruktionen verwandeln</p>
+              <div class="mt-auto"><a href="https://start.sketchometry.org" class="btn btn-primary" target="_blank"><i
+                    class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
             </div>
-            
-            <!-- GeoGebra Card -->
-            <div class="col" data-category="math">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/geogebra.svg" class="img-fluid" alt="GeoGebra Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">GeoGebra</h5>
-                      <p class="card-text">Werkzeuge für Funktionen, Geometrie und mathematische Berechnungen</p>
-                      <div class="mt-auto">
-                        <a href="https://www.geogebra.org/calculator" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          </div>
+        </div>
+      </div>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/leifi-physik.png" class="img-fluid" alt="LEIFIphysik"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">LEIFIphysik</h5>
+              <p class="card-text">Materialien, Versuche, Aufgaben und Tests</p>
+              <div class="mt-auto"><a href="https://www.leifiphysik.de" class="btn btn-primary" target="_blank"><i
+                    class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
             </div>
-            
-            <!-- Sketchometry Card -->
-            <div class="col" data-category="math">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/sketchometry.png" class="img-fluid" alt="Sketchometry Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">sketchometry</h5>
-                      <p class="card-text">Wandelt deine Skizzen und Zeichnungen in geometrische Konstruktionen um</p>
-                      <div class="mt-auto">
-                        <a href="https://start.sketchometry.org" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          </div>
+        </div>
+      </div>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/scratch.svg" class="img-fluid" alt="Scratch"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Scratch</h5>
+              <p class="card-text">Eigene Geschichten, Spiele und Animationen programmieren</p>
+              <div class="mt-auto"><a href="https://scratch.mit.edu/projects/editor" class="btn btn-primary"
+                  target="_blank"><i class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
             </div>
-            
-            <!-- LEIFIphysik Card -->
-            <div class="col" data-category="science">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/leifi-physik.png" class="img-fluid" alt="LEIFIphysik Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">LEIFIphysik</h5>
-                      <p class="card-text">Materialien, Versuche, Aufgaben und Tests für das Physiklernen</p>
-                      <div class="mt-auto">
-                        <a href="https://www.leifiphysik.de" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Scratch Card -->
-            <div class="col" data-category="coding">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/scratch.svg" class="img-fluid" alt="Scratch Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Scratch</h5>
-                      <p class="card-text">Programmiere spielerisch eigene Geschichten, Spiele und Animationen</p>
-                      <div class="mt-auto">
-                        <a href="https://scratch.mit.edu/projects/editor" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Python Card -->
-            <div class="col" data-category="coding">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/python.svg" class="img-fluid" alt="Python Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Python & TigerJython</h5>
-                      <p class="card-text">Programmieren, Turtle- & Koordinatengrafiken mit Python</p>
-                      <div class="mt-auto">
-                        <a href="https://webtigerjython.ethz.ch" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Editor
-                        </a>
-                        <a href="http://www.python-online.ch" class="btn-guide btn-outline-primary" target="_blank">
-                          <i class="fas fa-book me-1"></i>Guide
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Diagrams.net Card -->
-            <div class="col" data-category="collaboration">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/diagrams-net.svg" class="img-fluid" alt="Diagrams.net Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">diagrams.net</h5>
-                      <p class="card-text">Leistungsstarkes Werkzeug zur Erstellung von Diagrammen und Grafiken</p>
-                      <div class="mt-auto">
-                        <a href="https://app.diagrams.net" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Cryptpad Card -->
-            <div class="col" data-category="collaboration">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/cryptpad.svg" class="img-fluid" alt="Cryptpad Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Cryptpad</h5>
-                      <p class="card-text">Umfangreiche Suite zur sicheren kollaborativen Zusammenarbeit</p>
-                      <div class="mt-auto">
-                        <a href="https://cryptpad.fr" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Etherpad Card -->
-            <div class="col" data-category="collaboration">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/etherpad.png" class="img-fluid" alt="Etherpad Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Etherpad</h5>
-                      <p class="card-text">Einfacher Texteditor zur kollaborativen Bearbeitung von Texten in Echtzeit</p>
-                      <div class="mt-auto">
-                        <a href="https://pad.disroot.org/" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Kahoot Card -->
-            <div class="col" data-category="collaboration">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/kahoot.png" class="img-fluid" alt="Kahoot Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Kahoot</h5>
-                      <p class="card-text">Interaktives Lernspiel für spielerische Quiz- und Fragerunden</p>
-                      <div class="mt-auto">
-                        <a href="https://kahoot.it" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Klicksafe Card -->
-            <div class="col">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/klicksafe.svg" class="img-fluid" alt="Klicksafe Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Klicksafe</h5>
-                      <p class="card-text">EU-Initiative für mehr Medienkompetenz und Sicherheit im Internet</p>
-                      <div class="mt-auto">
-                        <a href="https://www.klicksafe.de" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Filestation Card -->
-            <div class="col">
-              <div class="card h-100">
-                <div class="row g-0 h-100">
-                  <div class="col-4">
-                    <div class="img-container">
-                      <img src="assets/filestation.svg" class="img-fluid" alt="Filestation Logo">
-                    </div>
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="card-title">Filestation</h5>
-                      <p class="card-text">Die Homeverzeichnisse im Webbrowser bequem verwalten</p>
-                      <div class="mt-auto">
-                        <a href="https://qnap2015ns01.schule.gce/filestation" class="btn btn-primary" target="_blank">
-                          <i class="fas fa-external-link-alt me-1"></i>Öffnen
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          </div>
+        </div>
+      </div>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/python.svg" class="img-fluid" alt="Python"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Python & TigerJython</h5>
+              <p class="card-text">Programmieren, Turtle- & Koordinatengrafiken</p>
+              <div class="mt-auto d-flex align-items-center gap-2">
+                <a href="https://webtigerjython.ethz.ch" class="btn btn-primary" target="_blank"><i
+                    class="fas fa-pen-ruler me-1"></i>Editor</a>
+                <a href="http://www.python-online.ch" class="btn btn-outline-primary btn-guide" target="_blank"><i
+                    class="fas fa-compass me-1"></i>Schnell-Guide</a>
               </div>
             </div>
           </div>
         </div>
-        
-        <div class="tab-pane fade" id="math" role="tabpanel">
-          <!-- Math category content will be populated by JavaScript -->
+      </div>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/diagrams-net.svg" class="img-fluid" alt="diagrams.net"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">diagrams.net</h5>
+              <p class="card-text">Diagramme und Grafiken erstellen</p>
+              <div class="mt-auto"><a href="https://app.diagrams.net" class="btn btn-primary" target="_blank"><i
+                    class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
+            </div>
+          </div>
         </div>
-        
-        <div class="tab-pane fade" id="science" role="tabpanel">
-          <!-- Science category content will be populated by JavaScript -->
+      </div>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/cryptpad.svg" class="img-fluid" alt="Cryptpad"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Cryptpad</h5>
+              <p class="card-text">Sichere kollaborative Zusammenarbeit</p>
+              <div class="mt-auto"><a href="https://cryptpad.fr" class="btn btn-primary" target="_blank"><i
+                    class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
+            </div>
+          </div>
         </div>
-        
-        <div class="tab-pane fade" id="coding" role="tabpanel">
-          <!-- Coding category content will be populated by JavaScript -->
+      </div>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/etherpad.png" class="img-fluid" alt="Etherpad"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Etherpad</h5>
+              <p class="card-text">Texte in Echtzeit gemeinsam bearbeiten</p>
+              <div class="mt-auto"><a href="https://pad.disroot.org/" class="btn btn-primary" target="_blank"><i
+                    class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
+            </div>
+          </div>
         </div>
-        
-        <div class="tab-pane fade" id="collaboration" role="tabpanel">
-          <!-- Collaboration category content will be populated by JavaScript -->
+      </div>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/kahoot.png" class="img-fluid" alt="Kahoot"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Kahoot</h5>
+              <p class="card-text">Interaktive Quiz- und Fragerunden</p>
+              <div class="mt-auto"><a href="https://kahoot.it" class="btn btn-primary" target="_blank"><i
+                    class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card h-100">
+        <div class="row g-0 h-100">
+          <div class="col-4">
+            <div class="img-container"><img src="assets/klicksafe.svg" class="img-fluid" alt="Klicksafe"></div>
+          </div>
+          <div class="col-8">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Klicksafe</h5>
+              <p class="card-text">Medienkompetenz und Sicherheit im Internet</p>
+              <div class="mt-auto"><a href="https://www.klicksafe.de" class="btn btn-primary" target="_blank"><i
+                    class="fas fa-external-link-alt me-1"></i>Öffnen</a></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    
-    <footer class="container">
-      <p>© 2025 GCE - Gymnasium Christian Ernestinum - Alle Rechte vorbehalten</p>
-    </footer>
-    
-    <!-- Dark mode toggle button -->
-    <div class="dark-mode-toggle">
-      <button class="btn btn-primary" id="darkModeToggle">
-        <i class="fas fa-moon"></i>
-      </button>
+  </div>
+
+  <div class="container admin-view hidden">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-3 text-white">
+      <div class="admin-badge"><i class="fa-solid fa-shield-halved"></i><span>Admin</span></div>
+      <div class="d-flex align-items-center gap-2"><button class="btn btn-light btn-sm" id="exitAdmin"><i
+            class="fa-solid fa-arrow-left"></i> Zurück</button></div>
     </div>
-    
-    <!-- JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Dark mode toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const body = document.body;
-        
-        darkModeToggle.addEventListener('click', function() {
-          body.classList.toggle('dark-mode');
-          if (body.classList.contains('dark-mode')) {
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-          } else {
-            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-          }
-        });
-        
-        // Filter functionality for search
-        const searchInput = document.getElementById('searchTools');
-        const allCards = document.querySelectorAll('.col');
-        
-        searchInput.addEventListener('input', function() {
-          const searchTerm = this.value.toLowerCase();
-          
-          allCards.forEach(card => {
-            const cardTitle = card.querySelector('.card-title').textContent.toLowerCase();
-            const cardText = card.querySelector('.card-text').textContent.toLowerCase();
-            
-            if (cardTitle.includes(searchTerm) || cardText.includes(searchTerm)) {
-              card.style.display = '';
-              card.classList.add('fade-in');
-            } else {
-              card.style.display = 'none';
-            }
-          });
-        });
-        
-        // Category filtering
-        const categoryTabs = document.querySelectorAll('#toolsTabs .nav-link');
-        
-        // Clone cards to respective category tabs
-        categoryTabs.forEach(tab => {
-          tab.addEventListener('click', function() {
-            const targetTabId = this.getAttribute('data-bs-target').substring(1);
-            
-            if (targetTabId !== 'all') {
-              const categoryPane = document.getElementById(targetTabId);
-              categoryPane.innerHTML = '';
-              
-              const rowDiv = document.createElement('div');
-              rowDiv.className = 'row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4';
-              categoryPane.appendChild(rowDiv);
-              
-              allCards.forEach(card => {
-                if (card.getAttribute('data-category') === targetTabId) {
-                  rowDiv.appendChild(card.cloneNode(true));
-                }
-              });
-            }
-          });
-        });
-        
-        // Add hover effect
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
-          card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px)';
-          });
-          
-          card.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-          });
-        });
-      });
-    </script>
-  </body>
+    <div class="grid" id="adminGrid">
+      <div class="card admin-card h-100 bg-transparent border border-danger-subtle text-white">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title"><i class="fa-solid fa-users-gear me-2"></i>Qnap</h5>
+          <p class="card-text">Homeverzeichnisse im Browser verwalten</p>
+          <div class="mt-auto"><a href="https://qnap2023ns01.gce.lan/filestation" class="btn admin-btn"><i
+                class="fa-solid fa-terminal me-1"></i>Öffnen</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="container">
+    <p>© 2025 GCE - Gymnasium Christian Ernestinum - Alle Rechte vorbehalten</p>
+  </footer>
+
+  <div class="dark-mode-toggle"><button class="btn btn-primary" id="darkModeToggle" aria-label="Dark Mode umschalten">
+      <i class="fas fa-circle-half-stroke"></i>
+    </button></div>
+
+  <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Admin-Authentifizierung</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Passwort</label>
+            <input type="password" class="form-control" id="adminPwd" placeholder="••••••••">
+          </div>
+          <div class="form-text"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+          <button type="button" class="btn btn-primary" id="confirmAdmin">Weiter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+  <script>
+    const ADMIN_PASSWORD = "pwd";
+    const darkToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    const mainView = document.querySelector('.main-view');
+    const adminView = document.querySelector('.admin-view');
+    const exitAdmin = document.getElementById('exitAdmin');
+    const hint = document.getElementById('hint');
+    const adminModalEl = document.getElementById('adminModal');
+    const adminModal = new bootstrap.Modal(adminModalEl);
+    const adminPwd = document.getElementById('adminPwd');
+    const confirmAdmin = document.getElementById('confirmAdmin');
+
+    const applySystemTheme = () => {
+      const userPref = localStorage.getItem('theme');
+      if (userPref === 'dark') body.classList.add('dark-mode');
+      else if (userPref === 'light') body.classList.remove('dark-mode');
+      else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) body.classList.add('dark-mode');
+      else body.classList.remove('dark-mode');
+    };
+    applySystemTheme();
+    if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applySystemTheme);
+
+    darkToggle.addEventListener('click', () => {
+      const isDark = body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      darkToggle.classList.add('glitch-enter');
+      setTimeout(() => darkToggle.classList.remove('glitch-enter'), 700);
+    });
+
+    const enterAdmin = () => {
+      adminModal.show();
+      setTimeout(() => adminPwd.focus(), 150);
+    };
+    const wrongPw = () => {
+      adminModalEl.querySelector('.modal-content').classList.add('shake');
+      setTimeout(() => adminModalEl.querySelector('.modal-content').classList.remove('shake'), 450);
+    };
+    const doAdminTransition = () => {
+      body.classList.add('admin-mode');
+      mainView.classList.add('fade-out');
+      setTimeout(() => {
+        mainView.classList.add('hidden'); adminView.classList.remove('hidden'); adminView.classList.add('glitch-enter');
+        const tiles = Array.from(document.querySelectorAll('#adminGrid .card'));
+        tiles.forEach((t, i) => { t.style.animationDelay = (i * 80) + 'ms'; t.classList.add('tile-pop'); });
+      }, 350);
+    };
+    const exitAdminMode = () => {
+      adminView.classList.add('fade-out');
+      setTimeout(() => {
+        adminView.classList.add('hidden'); adminView.classList.remove('fade-out');
+        mainView.classList.remove('hidden');
+        setTimeout(() => { mainView.classList.remove('fade-out'); mainView.classList.add('fade-in'); setTimeout(() => mainView.classList.remove('fade-in'), 700); }, 30);
+        body.classList.remove('admin-mode');
+      }, 320);
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) { e.preventDefault(); enterAdmin(); }
+      if (e.key === 'Escape' && !adminView.classList.contains('hidden')) { exitAdminMode(); }
+    });
+
+    confirmAdmin.addEventListener('click', () => {
+      if (adminPwd.value === ADMIN_PASSWORD) { adminModal.hide(); adminPwd.value = ""; doAdminTransition(); }
+      else wrongPw();
+    });
+    adminPwd.addEventListener('keydown', (e) => { if (e.key === 'Enter') confirmAdmin.click(); });
+    exitAdmin.addEventListener('click', exitAdminMode);
+
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.card').forEach((c, i) => { c.style.animationDelay = (i * 60) + 'ms'; c.classList.add('tile-pop'); });
+      setTimeout(() => { hint.classList.add('glitch-enter'); setTimeout(() => hint.classList.remove('glitch-enter'), 900); }, 500);
+    });
+  </script>
+</body>
+
 </html>
